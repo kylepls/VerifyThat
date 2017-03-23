@@ -1,9 +1,9 @@
-package in.kyle.api.conditions.types;
+package in.kyle.api.verify.types;
 
 import java.util.Collection;
 
-import in.kyle.api.conditions.Predicate;
-import in.kyle.api.conditions.Result;
+import in.kyle.api.verify.Predicate;
+import in.kyle.api.verify.Result;
 
 /**
  * Created by Kyle on 3/23/2017.
