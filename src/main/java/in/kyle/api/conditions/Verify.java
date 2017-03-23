@@ -7,6 +7,7 @@ import in.kyle.api.conditions.types.BooleanPredicate;
 import in.kyle.api.conditions.types.ClassPredicate;
 import in.kyle.api.conditions.types.CollectionPredicate;
 import in.kyle.api.conditions.types.NumberPredicate;
+import in.kyle.api.conditions.types.ObjectPredicate;
 import in.kyle.api.conditions.types.RunnablePredicate;
 import in.kyle.api.conditions.types.StringPredicate;
 import in.kyle.api.conditions.types.TypePredicate;
@@ -43,6 +44,10 @@ public enum Verify {
     
     public static TypePredicate that(Type type) {
         return new TypePredicate(type);
+    }
+    
+    public static ObjectPredicate that(Object object) {
+        return new ObjectPredicate(object);
     }
     
 }

@@ -13,7 +13,7 @@ public class StringUtils {
         for (Object object : args) {
             int i = builder.indexOf("{}");
             if (i > -1) {
-                builder.replace(i, i + 2, object.toString());
+                builder.replace(i, i + 2, object != null ? object.toString() : "null");
             } else {
                 throw new IllegalArgumentException(
                         "Wrong number of arguments for string (" + string + "), Length: " +
