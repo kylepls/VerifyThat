@@ -1,5 +1,6 @@
 package in.kyle.api.verify;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 import in.kyle.api.verify.utils.StringUtils;
@@ -29,9 +30,20 @@ public class Result {
     public void error(String message, Object... vars) {
         error(() -> {
             String send = StringUtils.replaceVariables(message, vars);
-            return new ComparisionException(send);
+            ComparisionException comparisionException = new ComparisionException(send);
+            StackTraceElement[] stackTrace = comparisionException.getStackTrace();
+            String fileName;
+            while ((fileName = stackTrace[0].getFileName()) == null ||
+                   "Result.java".equals(fileName) || ("Predicate.java".equals(fileName)) &&
+                                                     "result".equals(stackTrace[0].getMethodName
+                                                             ())) {
+                stackTrace = Arrays.copyOfRange(stackTrace, 1, stackTrace.length);
+            }
+            comparisionException.setStackTrace(stackTrace);
+            return comparisionException;
         });
     }
+    
     
     @SneakyThrows
     public void error(Supplier<Exception> exception) {
