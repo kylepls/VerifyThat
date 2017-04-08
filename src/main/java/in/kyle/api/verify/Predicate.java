@@ -1,5 +1,7 @@
 package in.kyle.api.verify;
 
+import java.util.Arrays;
+
 import in.kyle.api.verify.utils.StringUtils;
 import lombok.Data;
 
@@ -11,60 +13,76 @@ public abstract class Predicate<T> {
     
     protected final T compare;
     
-    public Result isNotNull() {
-        return result(compare != null, "Value is null: {}", compare);
+    public void isNotNull() {
+        process(compare != null, "Value is null: {}", compare);
     }
     
-    public Result isNull() {
-        return result(compare == null, "Value is not null: {}", compare);
+    public void isNull() {
+        process(compare == null, "Value is not null: {}", compare);
     }
     
-    public Result isEqual(T t) {
+    public void isEqual(T t) {
         isNotNull();
-        return result(compare.equals(t), "Value is equal {} equals {}", compare, t);
+        process(compare.equals(t), "Value is equal {} equals {}", compare, t);
     }
     
-    public Result isNotEqual(T t) {
+    public void isNotEqual(T t) {
         isNotNull();
-        return result(!compare.equals(t), "Value is not equal {} not equal {}", compare, t);
+        process(!compare.equals(t), "Value is not equal {} not equal {}", compare, t);
     }
     
-    public Result isSame(T t) {
+    public void isSame(T t) {
         isNotNull();
-        return result(compare == t, "Value is same {} == {}", compare, t);
+        process(compare == t, "Value is same {} == {}", compare, t);
     }
     
-    public Result isNotSame(T t) {
+    public void isNotSame(T t) {
         isNotNull();
-        return result(compare != t, "Value is different {} != {}", compare, t);
+        process(compare != t, "Value is different {} != {}", compare, t);
     }
     
-    public Result isInstanceOf(Class<?> clazz) {
+    public void isInstanceOf(Class<?> clazz) {
         isNotNull();
-        return result(clazz.isInstance(compare), "Value is instance of {}", clazz.getName());
+        process(clazz.isInstance(compare), "Value is instance of {}", clazz.getName());
     }
     
-    public Result isNotInstanceOf(Class<?> clazz) {
+    public void isNotInstanceOf(Class<?> clazz) {
         isNotNull();
-        return result(!clazz.isInstance(compare), "Value not instance of {}", clazz.getName());
+        process(!clazz.isInstance(compare), "Value not instance of {}", clazz.getName());
     }
     
-    public Result isExactType(Class<?> clazz) {
+    public void isExactType(Class<?> clazz) {
         isNotNull();
-        return result(clazz.equals(compare.getClass()),
-                      "Value class not {}, but instead {}",
-                      clazz.getName(),
-                      compare.getClass().getName());
+        process(clazz.equals(compare.getClass()),
+                "Value class not {}, but instead {}",
+                clazz.getName(),
+                compare.getClass().getName());
     }
     
-    public Result isNotExactType(Class<?> clazz) {
+    public void isNotExactType(Class<?> clazz) {
         isNotNull();
-        return result(!clazz.equals(compare.getClass()),
-                      "Value is not class {}, but instead {}",
-                      compare.getClass().getName());
+        process(!clazz.equals(compare.getClass()),
+                "Value is not class {}, but instead {}",
+                compare.getClass().getName());
     }
     
-    protected static Result result(boolean bool, String errorMessage, Object... vars) {
-        return new Result(!bool, StringUtils.replaceVariables(errorMessage, vars));
+    protected void process(boolean condition, String errorMessage, Object... vars) {
+        if (!condition) {
+            error(errorMessage, vars);
+        }
+    }
+    
+    private void error(String message, Object... vars) {
+        String send = StringUtils.replaceVariables(message, vars);
+        ComparisionException comparisionException = new ComparisionException(send);
+        StackTraceElement[] stackTrace = comparisionException.getStackTrace();
+        String fileName;
+        while ((fileName = stackTrace[0].getFileName()) == null || "void.java".equals(fileName) ||
+               ("Predicate.java".equals(fileName)) &&
+               "result".equals(stackTrace[0].getMethodName())) {
+            stackTrace = Arrays.copyOfRange(stackTrace, 1, stackTrace.length);
+        }
+        comparisionException.setStackTrace(stackTrace);
+        throw comparisionException;
     }
 }

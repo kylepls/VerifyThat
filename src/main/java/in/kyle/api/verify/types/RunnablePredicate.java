@@ -1,39 +1,38 @@
 package in.kyle.api.verify.types;
 
 import in.kyle.api.verify.Lamda;
-import in.kyle.api.verify.Predicate;
-import in.kyle.api.verify.Result;
+import in.kyle.api.verify.NonNullPredicate;
 
 /**
  * Created by Kyle on 3/23/2017.
  */
-public class RunnablePredicate extends Predicate<Lamda.ThrowableRunnable> {
+public class RunnablePredicate extends NonNullPredicate<Lamda.ThrowableRunnable> {
     
     public RunnablePredicate(Lamda.ThrowableRunnable compare) {
         super(compare);
     }
     
-    public Result throwsException(Class<? extends Throwable> expected) {
+    public void throwsException(Class<? extends Throwable> expected) {
         try {
             compare.run();
-            return result(false, "Did not catch exception {}", expected.getName());
+            process(false, "Did not catch exception {}", expected.getName());
         } catch (Throwable throwable) {
             if (throwable.getClass().equals(expected)) {
-                return result(true, "");
+                process(true, "");
             } else {
                 throwable.printStackTrace();
-                return result(false, "Caught unknown exception {}", throwable.getClass().getName());
+                process(false, "Caught unknown exception {}", throwable.getClass().getName());
             }
         }
     }
     
-    public Result doesNotThrowException() {
+    public void doesNotThrowException() {
         try {
             compare.run();
-            return result(true, "");
+            process(true, "");
         } catch (Throwable throwable) {
             throwable.printStackTrace();
-            return result(false, "Caught exception {}", throwable.getClass().getName());
+            process(false, "Caught exception {}", throwable.getClass().getName());
         }
     }
 }

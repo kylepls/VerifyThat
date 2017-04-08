@@ -1,7 +1,6 @@
 package in.kyle.api.verify.types;
 
 import in.kyle.api.verify.Predicate;
-import in.kyle.api.verify.Result;
 
 /**
  * Created by Kyle on 3/23/2017.
@@ -12,11 +11,11 @@ public class BooleanPredicate extends Predicate<Boolean> {
         super(compare);
     }
     
-    public Result isTrue() {
-        return result(compare, "Value is false, expected true");
+    public void isTrue() {
+        process(compare, "Value is false, expected true");
     }
     
-    public Result isFalse() {
-        return result(!compare, "Value is true, expected false");
+    public void isFalse() {
+        process(!compare, "Value is true, expected false");
     }
 }
