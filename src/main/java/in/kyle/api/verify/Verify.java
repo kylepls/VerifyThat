@@ -3,6 +3,7 @@ package in.kyle.api.verify;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
+import in.kyle.api.verify.types.ArrayPredicate;
 import in.kyle.api.verify.types.BooleanPredicate;
 import in.kyle.api.verify.types.ClassPredicate;
 import in.kyle.api.verify.types.CollectionPredicate;
@@ -17,6 +18,10 @@ import in.kyle.api.verify.types.TypePredicate;
  */
 public enum Verify {
     ;
+    
+    public static <T> ArrayPredicate<T> that(T[] array) {
+        return new ArrayPredicate<>(array);
+    }
     
     public static BooleanPredicate that(boolean bool) {
         return new BooleanPredicate(bool);
