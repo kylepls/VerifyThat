@@ -73,7 +73,6 @@ public class ArrayPredicateTest {
     @Test(expected = ComparisionException.class)
     public void testArrayNotEqualsFail() {
         Verify.that(odd).arrayNotEquals(odd);
-        Verify.that((Number) null).isEqual();
     }
     
 }
