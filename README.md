@@ -1,15 +1,15 @@
-##Verify
+## Verify
 Make output validation more simple
 
-######Before:
+#### Before:
     
     Assert.assertEquals("A and b must be equal", expected, actual);
 
-######After:
+#### After:
     
     Verify.that(expected).isEqual(actual);
 
-####Maven:
+#### Maven:
 
 https://jitpack.io/#kylepls/VerifyThat/
 
