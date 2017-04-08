@@ -2,25 +2,28 @@ package in.kyle.api.verify.types;
 
 import java.util.Arrays;
 
-import in.kyle.api.verify.NonNullPredicate;
+import in.kyle.api.verify.Predicate;
 
 /**
  * Created by Kyle on 4/7/2017.
  */
-public class ArrayPredicate<T> extends NonNullPredicate<T[]> {
+public class ArrayPredicate<T> extends Predicate<T[]> {
     public ArrayPredicate(T[] compare) {
         super(compare);
     }
     
     public void isEmpty() {
+        isNotNull();
         sizeIs(0);
     }
     
     public void isNotEmpty() {
+        isNotNull();
         sizeIsNot(0);
     }
     
     public void sizeIs(int size) {
+        isNotNull();
         process(compare.length == size,
                 "Array size should be {}, instead got {}",
                 size,
@@ -28,18 +31,22 @@ public class ArrayPredicate<T> extends NonNullPredicate<T[]> {
     }
     
     public void sizeIsNot(int size) {
+        isNotNull();
         process(compare.length != size, "Array size should not be {}", size);
     }
     
     public void contains(T t) {
+        isNotNull();
         process(arrayContains(t), "Array does not contain {}, {}", t, arrayToString(compare));
     }
     
     public void notContain(T t) {
+        isNotNull();
         process(!arrayContains(t), "Array contains {}", t);
     }
     
     public void arrayEquals(T[] other) {
+        isNotNull();
         process(arrayEquals(compare, other),
                 "Array {} != {}",
                 arrayToString(compare),
@@ -47,6 +54,7 @@ public class ArrayPredicate<T> extends NonNullPredicate<T[]> {
     }
     
     public void arrayNotEquals(T[] other) {
+        isNotNull();
         process(!arrayEquals(compare, other),
                 "Array {} == {}",
                 arrayToString(compare),
