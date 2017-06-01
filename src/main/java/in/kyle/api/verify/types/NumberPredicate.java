@@ -76,4 +76,12 @@ public class NumberPredicate extends Predicate<Number> {
                 compare,
                 number);
     }
+    
+    @Override
+    public void isEqual(Number number) {
+        process(number.doubleValue() == compare.doubleValue(),
+                "Values not equal {}={}",
+                compare,
+                number);
+    }
 }

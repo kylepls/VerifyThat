@@ -110,4 +110,9 @@ public class NumberPredicateTest {
     public void testIsNotDivisibleByError() {
         Verify.that(4).isNotDivisibleBy(2);
     }
+    
+    @Test
+    public void testDiffType() {
+        Verify.that(4.0).isEqual(4);
+    }
 }
