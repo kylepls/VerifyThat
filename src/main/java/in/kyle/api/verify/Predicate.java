@@ -23,7 +23,7 @@ public abstract class Predicate<T> {
     
     public void isEqual(T t) {
         isNotNull();
-        process(compare.equals(t), "Value is equal {} equals {}", compare, t);
+        process(compare.equals(t), "Values are not equal {} != {}", compare, t);
     }
     
     public void isNotEqual(T t) {
