@@ -59,7 +59,7 @@ public enum Verify {
     }
     
     public static ThrowablePredicate that(Throwable t) {
-        return new ThrowablePredicate<>(t);
+        return new ThrowablePredicate(t);
     }
     
     public static <K, V> MapPredicate<K, V> that(Map<K, V> map) {
