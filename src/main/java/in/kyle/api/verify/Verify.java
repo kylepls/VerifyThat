@@ -2,11 +2,14 @@ package in.kyle.api.verify;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Map;
 
-import in.kyle.api.verify.types.ArrayPredicate;
 import in.kyle.api.verify.types.BooleanPredicate;
 import in.kyle.api.verify.types.ClassPredicate;
 import in.kyle.api.verify.types.CollectionPredicate;
+import in.kyle.api.verify.types.MapPredicate;
+import in.kyle.api.verify.types.ThrowablePredicate;
+import in.kyle.api.verify.types.ArrayPredicate;
 import in.kyle.api.verify.types.NumberPredicate;
 import in.kyle.api.verify.types.ObjectPredicate;
 import in.kyle.api.verify.types.RunnablePredicate;
@@ -55,4 +58,11 @@ public enum Verify {
         return new ObjectPredicate(object);
     }
     
+    public static ThrowablePredicate that(Throwable t) {
+        return new ThrowablePredicate<>(t);
+    }
+    
+    public static <K, V> MapPredicate<K, V> that(Map<K, V> map) {
+        return new MapPredicate<>(map);
+    }
 }

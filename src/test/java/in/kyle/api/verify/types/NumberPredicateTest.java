@@ -115,4 +115,11 @@ public class NumberPredicateTest {
     public void testDiffType() {
         Verify.that(4.0).isEqual(4);
     }
+    
+    // wtf
+    @Test
+    public void testNegativeZero() {
+        
+        Verify.that(-0.0).isEqual(0.0);
+    }
 }

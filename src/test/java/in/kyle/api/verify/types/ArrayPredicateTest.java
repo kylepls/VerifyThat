@@ -47,12 +47,12 @@ public class ArrayPredicateTest {
     
     @Test
     public void testNotContains() {
-        Verify.that(odd).notContain(2);
+        Verify.that(odd).notContains(2);
     }
     
     @Test(expected = ComparisionException.class)
     public void testNotContainsFail() {
-        Verify.that(odd).notContain(1);
+        Verify.that(odd).notContains(1);
     }
     
     @Test

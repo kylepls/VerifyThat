@@ -1,48 +1,19 @@
 package in.kyle.api.verify.types;
 
 import java.util.Arrays;
+import java.util.List;
 
-import in.kyle.api.verify.Predicate;
+import in.kyle.api.verify.types.iterable.IterablePredicate;
 
 /**
- * Created by Kyle on 4/7/2017.
+ * Created by Kyle on 6/6/2017.
  */
-public class ArrayPredicate<T> extends Predicate<T[]> {
+public class ArrayPredicate<T> extends IterablePredicate<T, List<T>> {
+    private final T[] compare;
+    
     public ArrayPredicate(T[] compare) {
-        super(compare);
-    }
-    
-    public void isEmpty() {
-        isNotNull();
-        sizeIs(0);
-    }
-    
-    public void isNotEmpty() {
-        isNotNull();
-        sizeIsNot(0);
-    }
-    
-    public void sizeIs(int size) {
-        isNotNull();
-        process(compare.length == size,
-                "Array size should be {}, instead got {}",
-                size,
-                compare.length);
-    }
-    
-    public void sizeIsNot(int size) {
-        isNotNull();
-        process(compare.length != size, "Array size should not be {}", size);
-    }
-    
-    public void contains(T t) {
-        isNotNull();
-        process(arrayContains(t), "Array does not contain {}, {}", t, arrayToString(compare));
-    }
-    
-    public void notContain(T t) {
-        isNotNull();
-        process(!arrayContains(t), "Array contains {}", t);
+        super(Arrays.asList(compare));
+        this.compare = compare;
     }
     
     public void arrayEquals(T[] other) {
@@ -71,15 +42,6 @@ public class ArrayPredicate<T> extends Predicate<T[]> {
             }
         }
         return true;
-    }
-    
-    private boolean arrayContains(T element) {
-        for (T t : compare) {
-            if (t.equals(element)) {
-                return true;
-            }
-        }
-        return false;
     }
     
     private String arrayToString(T[] array) {

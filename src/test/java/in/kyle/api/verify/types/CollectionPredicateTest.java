@@ -25,12 +25,12 @@ public class CollectionPredicateTest {
     
     @Test
     public void testNotContains() {
-        Verify.that(of(1, 2, 3)).doesNotContain(4);
+        Verify.that(of(1, 2, 3)).notContains(4);
     }
     
     @Test(expected = ComparisionException.class)
     public void testNotContainsError() {
-        Verify.that(of(1, 2, 3)).doesNotContain(2);
+        Verify.that(of(1, 2, 3)).notContains(2);
     }
     
     @Test
