@@ -1,12 +1,10 @@
 package in.kyle.api.verify.utils;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * Created by Kyle at Mar 8, 2015
  */
-@UtilityClass
-public class StringUtils {
+public enum  StringUtils {
+    ;
     
     public static String replaceVariables(String string, Object... args) {
         StringBuilder builder = new StringBuilder(string);

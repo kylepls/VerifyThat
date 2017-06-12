@@ -40,7 +40,7 @@ public enum Verify {
         return new NumberPredicate(number);
     }
     
-    public static RunnablePredicate that(Lamda.ThrowableRunnable runnable) {
+    public static RunnablePredicate that(ThrowableRunnable runnable) {
         return new RunnablePredicate(runnable);
     }
     
@@ -58,5 +58,9 @@ public enum Verify {
     
     public static <K, V> MapPredicate<K, V> that(Map<K, V> map) {
         return new MapPredicate<>(map);
+    }
+    
+    public interface ThrowableRunnable {
+        void run() throws Throwable;
     }
 }
