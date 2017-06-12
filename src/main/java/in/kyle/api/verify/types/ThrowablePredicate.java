@@ -31,6 +31,10 @@ public class ThrowablePredicate extends Predicate<Throwable> {
         process(calculateContainsMethod(method), "Stack does not contain method {}", method);
     }
     
+    public void messageIs(String message) {
+        Verify.that(compare.getMessage()).isEqual(message);
+    }
+    
     private boolean calculateContainsMethod(Method method) {
         for (StackTraceElement element : compare.getStackTrace()) {
             if (element.getMethodName().equals(method.getName())) {

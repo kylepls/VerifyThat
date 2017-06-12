@@ -41,6 +41,18 @@ public class ThrowablePredicateTest {
         Verify.that(error).containsMethod(getError);
     }
     
+    @Test
+    public void testMessageIs() {
+        RuntimeException exception = new RuntimeException("sample text");
+        Verify.that(exception).messageIs("sample text");
+    }
+    
+    @Test(expected = Exception.class)
+    public void testMessageIsError() {
+        RuntimeException exception = new RuntimeException("sample text");
+        Verify.that(exception).messageIs("420");
+    }
+    
     private static class Inside {
         private static RuntimeException getError() {
             return new RuntimeException();
