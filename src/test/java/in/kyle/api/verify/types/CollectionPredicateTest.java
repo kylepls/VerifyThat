@@ -73,6 +73,11 @@ public class CollectionPredicateTest {
         Verify.that(of(1, 2, 3)).sizeIsNot(3);
     }
     
+    @Test
+    public void testToArrayPredicate() {
+        Verify.that(of(1, 2, 3)).toArrayPredicate().sizeIs(3);
+    }
+    
     private static <T> Collection<T> of(T... t) {
         return Arrays.asList(t);
     }

@@ -49,18 +49,6 @@ public class IterablePredicate<V, T extends Iterable<V>> extends Predicate<T> {
         process(!collection.contains(v), "Array contains {}", v);
     }
     
-    public void isEqual(Iterable<V> other) {
-        isNotNull();
-        Collection<V> otherCollection = toCollection(other);
-        process(collection.equals(otherCollection), "Array {} != {}", compare, otherCollection);
-    }
-    
-    public void isNotEqual(Iterable<V> other) {
-        isNotNull();
-        Collection<V> otherCollection = toCollection(other);
-        process(!collection.equals(otherCollection), "Array {} == {}", compare, otherCollection);
-    }
-    
     private int getSize() {
         return (int) compare.spliterator().getExactSizeIfKnown();
     }

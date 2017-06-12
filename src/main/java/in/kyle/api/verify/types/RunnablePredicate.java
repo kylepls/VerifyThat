@@ -21,7 +21,6 @@ public class RunnablePredicate extends Predicate<Lamda.ThrowableRunnable> {
             if (throwable.getClass().equals(expected)) {
                 process(true, "");
             } else {
-                throwable.printStackTrace();
                 process(false, "Caught unknown exception {}", throwable.getClass().getName());
             }
         }

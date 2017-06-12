@@ -2,6 +2,8 @@ package in.kyle.api.verify.types;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import in.kyle.api.verify.ComparisionException;
 import in.kyle.api.verify.Verify;
 
@@ -75,4 +77,8 @@ public class ArrayPredicateTest {
         Verify.that(odd).arrayNotEquals(odd);
     }
     
+    @Test(expected = ComparisionException.class)
+    public void testArrayEqualsSizeError() {
+        Verify.that(odd).isEqual(Arrays.asList(1, 2));
+    }
 }

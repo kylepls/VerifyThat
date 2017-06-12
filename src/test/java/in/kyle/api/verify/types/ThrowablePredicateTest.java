@@ -21,7 +21,6 @@ public class ThrowablePredicateTest {
     @Test(expected = Exception.class)
     public void testNotContainsStack() {
         RuntimeException error = Inside.getError();
-        error.printStackTrace();
         Verify.that(error).containsStackElement(Integer.class);
     }
     
@@ -29,7 +28,6 @@ public class ThrowablePredicateTest {
     public void testNotContainsMethod() throws NoSuchMethodException {
         Method getError = Inside.class.getDeclaredMethod("otherMethod");
         RuntimeException error = Inside.getError();
-        error.printStackTrace();
         Verify.that(error).containsMethod(getError);
     }
     
@@ -37,7 +35,6 @@ public class ThrowablePredicateTest {
     public void testContainsMethod() throws NoSuchMethodException {
         Method getError = Inside.class.getDeclaredMethod("getError");
         RuntimeException error = Inside.getError();
-        error.printStackTrace();
         Verify.that(error).containsMethod(getError);
     }
     
@@ -51,6 +48,12 @@ public class ThrowablePredicateTest {
     public void testMessageIsError() {
         RuntimeException exception = new RuntimeException("sample text");
         Verify.that(exception).messageIs("420");
+    }
+    
+    @Test
+    public void testToStackPredicate() {
+        RuntimeException exception = new RuntimeException("sample text");
+        Verify.that(exception).toStackPredicate().sizeIsNot(0);
     }
     
     private static class Inside {
