@@ -16,7 +16,8 @@ public class ArrayPredicate<T> extends IterablePredicate<T, List<T>> {
         this.compare = compare;
     }
     
-    public void arrayEquals(T[] other) {
+    @SafeVarargs
+    public final void arrayEquals(T... other) {
         isNotNull();
         process(arrayEquals(compare, other),
                 "Array {} != {}",
@@ -24,7 +25,8 @@ public class ArrayPredicate<T> extends IterablePredicate<T, List<T>> {
                 arrayToString(other));
     }
     
-    public void arrayNotEquals(T[] other) {
+    @SafeVarargs
+    public final void arrayNotEquals(T... other) {
         isNotNull();
         process(!arrayEquals(compare, other),
                 "Array {} == {}",

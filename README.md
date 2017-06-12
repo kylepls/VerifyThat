@@ -1,13 +1,37 @@
-## Verify
-Make output validation more simple
+## VerifyThat
+Make testing validation more fluent and understandable.
 
-#### Before:
+##### String:
     
+    // before
     Assert.assertEquals("A and b must be equal", expected, actual);
 
-#### After:
-    
+    // after
     Verify.that(expected).isEqual(actual);
+
+##### Boolean:
+
+    // before
+    Assert.assertTrue(bool);
+    
+    // after
+    Verify.that(true).isTrue();
+
+##### Array:
+    
+    // before
+    Assert.assertArrayEquals(array, new int[] {1,2,3});
+    
+    // after
+    Verify.that(array).arrayEquals(1, 2, 3);
+
+##### Map:
+
+    // before    
+    Assert.assertEquals(true, map.containsKey("a"));
+    
+    // after
+    Verify.that(map).containsKey("a");
 
 #### Maven:
 

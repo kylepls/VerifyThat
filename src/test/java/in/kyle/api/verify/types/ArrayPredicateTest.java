@@ -2,8 +2,6 @@ package in.kyle.api.verify.types;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import in.kyle.api.verify.ComparisionException;
 import in.kyle.api.verify.Verify;
 
@@ -15,7 +13,6 @@ public class ArrayPredicateTest {
     private Integer[] empty = {};
     
     private Integer[] odd = {1, 3, 5};
-    private Integer[] even = {2, 4, 6};
     
     @Test
     public void testEmpty() {
@@ -59,17 +56,17 @@ public class ArrayPredicateTest {
     
     @Test
     public void testArrayEquals() {
-        Verify.that(odd).arrayEquals(new Integer[]{1, 3, 5});
+        Verify.that(odd).arrayEquals(1, 3, 5);
     }
     
     @Test(expected = ComparisionException.class)
     public void testArrayEqualsFail() {
-        Verify.that(odd).arrayEquals(new Integer[]{1, 2, 5});
+        Verify.that(odd).arrayEquals(1, 2, 5);
     }
     
     @Test
     public void testArrayNotEquals() {
-        Verify.that(odd).arrayNotEquals(new Integer[]{1, 2, 5});
+        Verify.that(odd).arrayNotEquals(1, 2, 5);
     }
     
     @Test(expected = ComparisionException.class)
@@ -79,6 +76,6 @@ public class ArrayPredicateTest {
     
     @Test(expected = ComparisionException.class)
     public void testArrayEqualsSizeError() {
-        Verify.that(odd).isEqual(Arrays.asList(1, 2));
+        Verify.that(odd).arrayEquals(1, 2);
     }
 }
