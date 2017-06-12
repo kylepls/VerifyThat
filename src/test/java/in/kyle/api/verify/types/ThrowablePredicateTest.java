@@ -14,7 +14,6 @@ public class ThrowablePredicateTest {
     @Test
     public void testContainsStack() {
         RuntimeException error = Inside.getError();
-        error.printStackTrace();
         Verify.that(error).containsStackElement(Inside.class);
     }
     
