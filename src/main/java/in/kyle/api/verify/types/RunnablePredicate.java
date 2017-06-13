@@ -1,5 +1,8 @@
 package in.kyle.api.verify.types;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import in.kyle.api.verify.Predicate;
 import in.kyle.api.verify.Verify;
 
@@ -14,15 +17,21 @@ public class RunnablePredicate extends Predicate<Verify.ThrowableRunnable> {
     
     public void throwsException(Class<? extends Throwable> expected) {
         isNotNull();
+        boolean ran = false;
         try {
             compare.run();
-            process(false, "Did not catch exception {}", expected.getName());
+            ran = true;
         } catch (Throwable throwable) {
-            if (throwable.getClass().equals(expected)) {
-                process(true, "");
-            } else {
-                process(false, "Caught unknown exception {}", throwable.getClass().getName());
+            if (!throwable.getClass().equals(expected)) {
+                StringWriter writer = new StringWriter();
+                PrintWriter printWriter = new PrintWriter(writer);
+                throwable.printStackTrace(printWriter);
+                
+                process(false, "Caught unknown exception\n{}", writer.getBuffer().toString());
             }
+        }
+        if (ran) {
+            process(false, "Did not catch exception {}", expected.getName());
         }
     }
     

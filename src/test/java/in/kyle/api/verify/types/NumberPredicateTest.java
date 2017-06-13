@@ -102,7 +102,6 @@ public class NumberPredicateTest {
     
     @Test
     public void testIsNotDivisibleBy() {
-        System.out.println(3 % 2);
         Verify.that(3).isNotDivisibleBy(2);
     }
     

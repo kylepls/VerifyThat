@@ -3,12 +3,12 @@ package in.kyle.api.verify;
 import java.util.Arrays;
 
 import in.kyle.api.verify.utils.StringUtils;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 
 /**
  * Created by Kyle on 3/23/2017.
  */
-@Data
+@AllArgsConstructor
 public abstract class Predicate<T> {
     
     protected final T compare;
@@ -75,14 +75,30 @@ public abstract class Predicate<T> {
     private void error(String message, Object... vars) {
         String send = StringUtils.replaceVariables(message, vars);
         ComparisionException comparisionException = new ComparisionException(send);
-        StackTraceElement[] stackTrace = comparisionException.getStackTrace();
-        String fileName;
-        while ((fileName = stackTrace[0].getFileName()) == null || "void.java".equals(fileName) ||
-               ("Predicate.java".equals(fileName)) &&
-               "result".equals(stackTrace[0].getMethodName())) {
-            stackTrace = Arrays.copyOfRange(stackTrace, 1, stackTrace.length);
-        }
-        comparisionException.setStackTrace(stackTrace);
+        eraseTopPackageFromStack(comparisionException);
         throw comparisionException;
+    }
+    
+    private static void eraseTopPackageFromStack(Throwable throwable) {
+        StackTraceElement[] stackTrace = throwable.getStackTrace();
+        String packageName = getPackage(stackTrace[0].getClassName());
+        for (int i = 1; i < stackTrace.length; i++) {
+            StackTraceElement element = stackTrace[i];
+            String p = getPackage(element.getFileName());
+            if (!packageName.equals(p)) {
+                eraseFromStack(i, throwable);
+                break;
+            }
+        }
+    }
+    
+    private static String getPackage(String fileName) {
+        return fileName.substring(0, fileName.lastIndexOf("."));
+    }
+    
+    private static void eraseFromStack(int calls, Throwable throwable) {
+        StackTraceElement[] stackTrace = throwable.getStackTrace();
+        StackTraceElement[] elements = Arrays.copyOfRange(stackTrace, calls, stackTrace.length);
+        throwable.setStackTrace(elements);
     }
 }

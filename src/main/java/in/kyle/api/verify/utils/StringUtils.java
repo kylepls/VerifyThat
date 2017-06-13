@@ -3,8 +3,10 @@ package in.kyle.api.verify.utils;
 /**
  * Created by Kyle at Mar 8, 2015
  */
-public enum  StringUtils {
-    ;
+public final class StringUtils {
+    
+    private StringUtils() {
+    }
     
     public static String replaceVariables(String string, Object... args) {
         StringBuilder builder = new StringBuilder(string);

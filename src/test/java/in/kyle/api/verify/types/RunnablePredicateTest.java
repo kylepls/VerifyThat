@@ -23,6 +23,13 @@ public class RunnablePredicateTest {
         }).throwsException(RuntimeException.class);
     }
     
+    @Test(expected = ComparisionException.class)
+    public void testUnexpectedExceptionError() {
+        Verify.that(()->{
+            throw new IllegalAccessError();
+        }).throwsException(NullPointerException.class);
+    }
+    
     @Test
     public void testNotThrowsException() {
         Verify.that(() -> {
@@ -34,5 +41,11 @@ public class RunnablePredicateTest {
         Verify.that(() -> {
             throw new RuntimeException();
         }).doesNotThrowException();
+    }
+    
+    @Test(expected = ComparisionException.class)
+    public void testNoError() {
+        Verify.that(()->{
+        }).throwsException(ComparisionException.class);
     }
 }
