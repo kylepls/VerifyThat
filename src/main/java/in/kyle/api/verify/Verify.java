@@ -17,8 +17,10 @@ import in.kyle.api.verify.types.ThrowablePredicate;
 /**
  * Created by Kyle on 3/23/2017.
  */
-public enum Verify {
-    ;
+public final class Verify {
+    
+    private Verify() {
+    }
     
     public static <T> ArrayPredicate<T> that(T[] array) {
         return new ArrayPredicate<>(array);

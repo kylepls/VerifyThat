@@ -79,12 +79,18 @@ public abstract class Predicate<T> {
         throw comparisionException;
     }
     
+    private static void eraseFromStack(int calls, Throwable throwable) {
+        StackTraceElement[] stackTrace = throwable.getStackTrace();
+        StackTraceElement[] elements = Arrays.copyOfRange(stackTrace, calls, stackTrace.length);
+        throwable.setStackTrace(elements);
+    }
+    
     private static void eraseTopPackageFromStack(Throwable throwable) {
         StackTraceElement[] stackTrace = throwable.getStackTrace();
         String packageName = getPackage(stackTrace[0].getClassName());
-        for (int i = 1; i < stackTrace.length; i++) {
+        for (int i = 0; i < stackTrace.length; i++) {
             StackTraceElement element = stackTrace[i];
-            String p = getPackage(element.getFileName());
+            String p = getPackage(element.getClassName());
             if (!packageName.equals(p)) {
                 eraseFromStack(i, throwable);
                 break;
@@ -93,12 +99,7 @@ public abstract class Predicate<T> {
     }
     
     private static String getPackage(String fileName) {
+        fileName = fileName.replace(".java", "");
         return fileName.substring(0, fileName.lastIndexOf("."));
-    }
-    
-    private static void eraseFromStack(int calls, Throwable throwable) {
-        StackTraceElement[] stackTrace = throwable.getStackTrace();
-        StackTraceElement[] elements = Arrays.copyOfRange(stackTrace, calls, stackTrace.length);
-        throwable.setStackTrace(elements);
     }
 }
