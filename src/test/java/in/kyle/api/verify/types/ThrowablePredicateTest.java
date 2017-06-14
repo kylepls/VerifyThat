@@ -55,6 +55,13 @@ public class ThrowablePredicateTest {
         Verify.that(exception).toStackPredicate().sizeIsNot(0);
     }
     
+    @Test
+    public void testCause() {
+        Throwable cause = new IllegalAccessError();
+        RuntimeException exception = new RuntimeException(cause);
+        Verify.that(exception).causeIs(IllegalAccessError.class);
+    }
+    
     private static class Inside {
         private static RuntimeException getError() {
             return new RuntimeException();

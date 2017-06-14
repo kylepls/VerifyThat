@@ -68,15 +68,15 @@ public abstract class Predicate<T> {
     
     protected void process(boolean condition, String errorMessage, Object... vars) {
         if (!condition) {
-            error(errorMessage, vars);
+            throw error(errorMessage, vars);
         }
     }
     
-    private void error(String message, Object... vars) {
+    protected ComparisionException error(String message, Object... vars) {
         String send = StringUtils.replaceVariables(message, vars);
         ComparisionException comparisionException = new ComparisionException(send);
         eraseTopPackageFromStack(comparisionException);
-        throw comparisionException;
+        return comparisionException;
     }
     
     private static void eraseFromStack(int calls, Throwable throwable) {

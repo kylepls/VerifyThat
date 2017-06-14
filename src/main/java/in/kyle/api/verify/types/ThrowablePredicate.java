@@ -35,6 +35,10 @@ public class ThrowablePredicate extends Predicate<Throwable> {
         Verify.that(compare.getMessage()).isEqual(message);
     }
     
+    public void causeIs(Class<? extends Throwable> throwableClass) {
+        Verify.that(compare.getCause()).isExactType(throwableClass);
+    }
+    
     private boolean calculateContainsMethod(Method method) {
         for (StackTraceElement element : compare.getStackTrace()) {
             if (element.getMethodName().equals(method.getName())) {

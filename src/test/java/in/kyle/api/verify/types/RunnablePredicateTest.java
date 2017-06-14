@@ -48,4 +48,12 @@ public class RunnablePredicateTest {
         Verify.that(()->{
         }).throwsException(ComparisionException.class);
     }
+    
+    @Test
+    public void testNestedException() {
+        Verify.that(()->{
+            IllegalAccessException swag = new IllegalAccessException("swag");
+            throw new RuntimeException(swag);
+        }).throwsException(RuntimeException.class).causeIs(IllegalAccessException.class);
+    }
 }
