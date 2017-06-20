@@ -43,7 +43,10 @@ public abstract class Predicate<T> {
     
     public void isInstanceOf(Class<?> clazz) {
         isNotNull();
-        process(clazz.isInstance(compare), "Value is instance of {}", clazz.getName());
+        process(clazz.isInstance(compare),
+                "{} not is instance of {}",
+                compare.getClass().getName(),
+                clazz.getName());
     }
     
     public void isNotInstanceOf(Class<?> clazz) {
