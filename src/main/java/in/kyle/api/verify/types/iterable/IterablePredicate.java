@@ -7,10 +7,9 @@ import java.util.List;
 
 import in.kyle.api.verify.Predicate;
 
-/**
- * Created by Kyle on 6/6/2017.
- */
-public class IterablePredicate<V, T extends Iterable<V>> extends Predicate<T> {
+public abstract class IterablePredicate<V, T extends Iterable<V>, R extends IterablePredicate<V, 
+T, R>>
+        extends Predicate<T, R> {
     
     private Collection<V> collection;
     
@@ -19,34 +18,60 @@ public class IterablePredicate<V, T extends Iterable<V>> extends Predicate<T> {
         this.collection = toCollection(compare);
     }
     
-    public void isEmpty() {
+    public R isEmpty() {
         isNotNull();
         sizeIs(0);
+        return (R) this;
     }
     
-    public void isNotEmpty() {
+    public R isNotEmpty() {
         isNotNull();
         sizeIsNot(0);
+        return (R) this;
     }
     
-    public void sizeIs(int size) {
+    public R sizeIs(int size) {
         isNotNull();
-        process(getSize() == size, "Iterable size should be {}, instead got {}", size, getSize());
+        process(getSize() == size, "size == " + size, getSize());
+        return (R) this;
     }
     
-    public void sizeIsNot(int size) {
+    public R sizeIsNot(int size) {
         isNotNull();
-        process(getSize() != size, "Iterable size should not be {}", size);
+        process(getSize() != size, "size != " + size, getSize());
+        return (R) this;
     }
     
-    public void contains(V v) {
+    public R sizeIsGreaterThan(int size) {
         isNotNull();
-        process(collection.contains(v), "Array does not contain {}, {}", v, collection);
+        process(getSize() > size, "size > " + size, getSize());
+        return (R) this;
     }
     
-    public void notContains(V v) {
+    public R sizeIsLessThan(int size) {
         isNotNull();
-        process(!collection.contains(v), "Array contains {}", v);
+        process(getSize() < size, "size < " + size, getSize());
+        return (R) this;
+    }
+    
+    public R contains(V v) {
+        isNotNull();
+        process(collection.contains(v), "contains " + v, collection);
+        return (R) this;
+    }
+    
+    public R notContains(V v) {
+        isNotNull();
+        process(!collection.contains(v), "notContains " + v, collection);
+        return (R) this;
+    }
+    
+    public R contains(V... values) {
+        isNotNull();
+        for (V temp : values) {
+            contains(temp);
+        }
+        return (R) this;
     }
     
     private int getSize() {

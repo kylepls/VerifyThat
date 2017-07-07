@@ -2,86 +2,87 @@ package in.kyle.api.verify.types;
 
 import in.kyle.api.verify.Predicate;
 
-/**
- * Created by Kyle on 3/23/2017.
- */
-public class NumberPredicate extends Predicate<Number> {
+public class NumberPredicate extends Predicate<Number, NumberPredicate> {
     
     public NumberPredicate(Number compare) {
         super(compare);
     }
     
-    public void isZero() {
+    public NumberPredicate isZero() {
         isNotNull();
-        process(compare.doubleValue() == 0, "Value is not zero, {}, expected zero", compare);
+        process(compare.doubleValue() == 0, "0");
+        return this;
     }
     
-    public void isNotZero() {
+    public NumberPredicate isNotZero() {
         isNotNull();
-        process(compare.doubleValue() != 0, "Value zero, expected non-zero");
+        process(compare.doubleValue() != 0, "x != 0");
+        return this;
     }
     
-    public void isLessThan(double other) {
+    public NumberPredicate isLessThan(double other) {
         isNotNull();
-        process(compare.doubleValue() < other, "Value not less than {} < {}", compare, other);
+        process(compare.doubleValue() < other, "x < " + other);
+        return this;
     }
     
-    public void isGreaterThan(double other) {
+    public NumberPredicate isGreaterThan(double other) {
         isNotNull();
-        process(compare.doubleValue() > other, "Value not greater than {} > {}", compare, other);
+        process(compare.doubleValue() > other, "x > " + other);
+        return this;
     }
     
-    public void isWholeNumber() {
+    public NumberPredicate isWholeNumber() {
         isNotNull();
         double value = compare.doubleValue();
-        process(value == Math.floor(value) && !Double.isInfinite(value),
-                "Value is not whole number {}, expected whole number",
-                value);
+        process(value == Math.floor(value) && !Double.isInfinite(value), "wholeNumber(x)");
+        return this;
     }
     
-    public void isNotWholeNumber() {
+    public NumberPredicate isNotWholeNumber() {
         isNotNull();
         double value = compare.doubleValue();
-        process(value != Math.floor(value) && !Double.isInfinite(value),
-                "Value is whole number {}, expected non-whole number",
-                value);
+        process(value != Math.floor(value) && !Double.isInfinite(value), "notWholeNumber(x)");
+        return this;
     }
     
-    public void isFinite() {
+    public NumberPredicate isFinite() {
         isNotNull();
-        process(Double.isFinite(compare.doubleValue()),
-                "Value is not finite, {}, expected finite",
-                compare);
+        process(Double.isFinite(compare.doubleValue()), "finite(x)");
+        return this;
     }
     
-    public void isNotFinite() {
+    public NumberPredicate isNotFinite() {
         isNotNull();
-        process(!Double.isFinite(compare.doubleValue()),
-                "Value is finite, {}, expected non-finite",
-                compare);
+        process(!Double.isFinite(compare.doubleValue()), "notFinite(x)");
+        return this;
     }
     
-    public void isDivisibleBy(int number) {
+    public NumberPredicate isDivisibleBy(int number) {
         isNotNull();
-        process(compare.doubleValue() % number == 0,
-                "Number not divisible {} % {} != 0",
-                compare,
-                number);
+        process(compare.doubleValue() % number == 0, "x % " + number + " = 0", false);
+        return this;
     }
     
-    public void isNotDivisibleBy(int number) {
+    public NumberPredicate isNotDivisibleBy(int number) {
         isNotNull();
-        process(compare.doubleValue() % number == 1,
-                "Number divisible {} % {} == 0",
-                compare,
-                number);
+        process(compare.doubleValue() % number != 0, "x % " + number + " != 0", false);
+        return this;
     }
     
     @Override
-    public void isEqual(Number number) {
-        process(number.doubleValue() == compare.doubleValue(),
-                "Values not equal {}={}",
-                compare,
-                number);
+    public NumberPredicate isEqual(Number number) {
+        double a = correctNegativeZero(number.doubleValue());
+        double compare = correctNegativeZero(this.compare.doubleValue());
+        
+        process(Double.compare(compare, a) == 0, Double.toString(a));
+        return this;
+    }
+    
+    private double correctNegativeZero(double a) {
+        if (a == -0) {
+            a = 0;
+        }
+        return a;
     }
 }

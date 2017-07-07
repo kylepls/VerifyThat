@@ -7,9 +7,6 @@ import java.util.Map;
 
 import in.kyle.api.verify.Verify;
 
-/**
- * Created by Kyle on 6/6/2017.
- */
 public class MapPredicateTest {
     
     private Map<String, Integer> map = Maps.<String, Integer>start().kv("a", 1).make();

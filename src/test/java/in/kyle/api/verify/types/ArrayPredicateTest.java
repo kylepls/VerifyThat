@@ -5,9 +5,6 @@ import org.junit.Test;
 import in.kyle.api.verify.ComparisionException;
 import in.kyle.api.verify.Verify;
 
-/**
- * Created by Kyle on 4/7/2017.
- */
 public class ArrayPredicateTest {
     
     private Integer[] empty = {};
@@ -77,5 +74,15 @@ public class ArrayPredicateTest {
     @Test(expected = ComparisionException.class)
     public void testArrayEqualsSizeError() {
         Verify.that(odd).arrayEquals(1, 2);
+    }
+    
+    @Test
+    public void testContainsMany() {
+        Verify.that(odd).contains(1, 3);
+    }
+    
+    @Test(expected = ComparisionException.class)
+    public void testContainsManyFail() {
+        Verify.that(odd).contains(1, 4);
     }
 }

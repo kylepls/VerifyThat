@@ -5,17 +5,15 @@ import java.lang.reflect.Method;
 import in.kyle.api.verify.Predicate;
 import in.kyle.api.verify.Verify;
 
-/**
- * Created by Kyle on 6/6/2017.
- */
-public class ThrowablePredicate extends Predicate<Throwable> {
+public class ThrowablePredicate extends Predicate<Throwable, ThrowablePredicate> {
     
     public ThrowablePredicate(Throwable compare) {
         super(compare);
     }
     
-    public void containsStackElement(Class<?> clazz) {
-        process(calculateContainsClass(clazz), "Stack does not contain {}", clazz.getName());
+    public ThrowablePredicate containsStackElement(Class<?> clazz) {
+        process(calculateContainsClass(clazz), "contains " + clazz.getName());
+        return this;
     }
     
     private boolean calculateContainsClass(Class<?> clazz) {
@@ -27,16 +25,19 @@ public class ThrowablePredicate extends Predicate<Throwable> {
         return false;
     }
     
-    public void containsMethod(Method method) {
-        process(calculateContainsMethod(method), "Stack does not contain method {}", method);
+    public ThrowablePredicate containsMethod(Method method) {
+        process(calculateContainsMethod(method), "contains method " + method);
+        return this;
     }
     
-    public void messageIs(String message) {
+    public ThrowablePredicate messageIs(String message) {
         Verify.that(compare.getMessage()).isEqual(message);
+        return this;
     }
     
-    public void causeIs(Class<? extends Throwable> throwableClass) {
+    public ThrowablePredicate causeIs(Class<? extends Throwable> throwableClass) {
         Verify.that(compare.getCause()).isExactType(throwableClass);
+        return this;
     }
     
     private boolean calculateContainsMethod(Method method) {

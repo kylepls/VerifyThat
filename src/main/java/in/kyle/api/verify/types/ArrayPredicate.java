@@ -5,10 +5,7 @@ import java.util.List;
 
 import in.kyle.api.verify.types.iterable.IterablePredicate;
 
-/**
- * Created by Kyle on 6/6/2017.
- */
-public class ArrayPredicate<T> extends IterablePredicate<T, List<T>> {
+public class ArrayPredicate<T> extends IterablePredicate<T, List<T>, ArrayPredicate<T>> {
     private final T[] compare;
     
     public ArrayPredicate(T[] compare) {
@@ -17,21 +14,21 @@ public class ArrayPredicate<T> extends IterablePredicate<T, List<T>> {
     }
     
     @SafeVarargs
-    public final void arrayEquals(T... other) {
+    public final ArrayPredicate<T> arrayEquals(T... other) {
         isNotNull();
         process(arrayEquals(compare, other),
-                "Array {} != {}",
-                arrayToString(compare),
-                arrayToString(other));
+                arrayToString(compare) + " == " + arrayToString(other),
+                false);
+        return this;
     }
     
     @SafeVarargs
-    public final void arrayNotEquals(T... other) {
+    public final ArrayPredicate<T> arrayNotEquals(T... other) {
         isNotNull();
         process(!arrayEquals(compare, other),
-                "Array {} == {}",
-                arrayToString(compare),
-                arrayToString(other));
+                arrayToString(compare) + " != " + arrayToString(other),
+                false);
+        return this;
     }
     
     private boolean arrayEquals(T[] a, T[] b) {

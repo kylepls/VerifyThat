@@ -5,9 +5,6 @@ import org.junit.Test;
 import in.kyle.api.verify.ComparisionException;
 import in.kyle.api.verify.Verify;
 
-/**
- * Created by Kyle on 3/23/2017.
- */
 public class ObjectPredicateTest {
     
     private static Object nul = null;
@@ -111,5 +108,16 @@ public class ObjectPredicateTest {
     @Test(expected = ComparisionException.class)
     public void testIsNotExactTypeError() {
         Verify.that(this).isNotExactType(ObjectPredicateTest.class);
+    }
+    
+    @Test
+    public void testNamed() {
+        try {
+            Verify.that(this).named("123").isNull();
+        } catch (ComparisionException e) {
+            if (!e.getMessage().contains("123")) {
+                throw new AssertionError("Message does not contain 123");
+            }
+        }
     }
 }

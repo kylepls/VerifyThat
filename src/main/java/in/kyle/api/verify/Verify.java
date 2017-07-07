@@ -5,7 +5,7 @@ import java.util.Map;
 
 import in.kyle.api.verify.types.ArrayPredicate;
 import in.kyle.api.verify.types.BooleanPredicate;
-import in.kyle.api.verify.types.ClassPredicate;
+import in.kyle.api.verify.types.reflect.ClassPredicate;
 import in.kyle.api.verify.types.CollectionPredicate;
 import in.kyle.api.verify.types.MapPredicate;
 import in.kyle.api.verify.types.NumberPredicate;
@@ -14,9 +14,6 @@ import in.kyle.api.verify.types.RunnablePredicate;
 import in.kyle.api.verify.types.StringPredicate;
 import in.kyle.api.verify.types.ThrowablePredicate;
 
-/**
- * Created by Kyle on 3/23/2017.
- */
 public final class Verify {
     
     private Verify() {
@@ -30,7 +27,7 @@ public final class Verify {
         return new BooleanPredicate(bool);
     }
     
-    public static ClassPredicate that(Class clazz) {
+    public static ClassPredicate that(Class<?> clazz) {
         return new ClassPredicate(clazz);
     }
     

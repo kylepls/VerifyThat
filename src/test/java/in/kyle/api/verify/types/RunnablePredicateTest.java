@@ -2,12 +2,11 @@ package in.kyle.api.verify.types;
 
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import in.kyle.api.verify.ComparisionException;
 import in.kyle.api.verify.Verify;
 
-/**
- * Created by Kyle on 3/23/2017.
- */
 public class RunnablePredicateTest {
     
     @Test
@@ -25,7 +24,7 @@ public class RunnablePredicateTest {
     
     @Test(expected = ComparisionException.class)
     public void testUnexpectedExceptionError() {
-        Verify.that(()->{
+        Verify.that(() -> {
             throw new IllegalAccessError();
         }).throwsException(NullPointerException.class);
     }
@@ -45,15 +44,38 @@ public class RunnablePredicateTest {
     
     @Test(expected = ComparisionException.class)
     public void testNoError() {
-        Verify.that(()->{
+        Verify.that(() -> {
         }).throwsException(ComparisionException.class);
     }
     
     @Test
     public void testNestedException() {
-        Verify.that(()->{
+        Verify.that(() -> {
             IllegalAccessException swag = new IllegalAccessException("swag");
             throw new RuntimeException(swag);
         }).throwsException(RuntimeException.class).causeIs(IllegalAccessException.class);
+    }
+    
+    @Test(timeout = 10_000, expected = ComparisionException.class)
+    public void testTimeout() {
+        Verify.that(() -> {
+            Thread.sleep(1000);
+        }).timeout(10, TimeUnit.MILLISECONDS).doesNotThrowException();
+    }
+    
+    @Test(expected = RuntimeException.class)
+    public void testInterrupted() {
+        Thread thread = Thread.currentThread();
+        new Thread(()->{
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            thread.interrupt();
+        }).start();
+        Verify.that(() -> {
+            Thread.sleep(10000);
+        }).doesNotThrowException();
     }
 }

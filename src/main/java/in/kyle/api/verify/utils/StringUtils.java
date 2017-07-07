@@ -12,7 +12,7 @@ public final class StringUtils {
         StringBuilder builder = new StringBuilder(string);
         for (Object object : args) {
             int i = builder.indexOf("{}");
-            if (i > -1) {
+            if (i != -1) {
                 builder.replace(i, i + 2, object != null ? object.toString() : "null");
             } else {
                 throw new IllegalArgumentException(

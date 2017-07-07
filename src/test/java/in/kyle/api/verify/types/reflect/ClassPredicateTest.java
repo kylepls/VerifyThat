@@ -1,14 +1,12 @@
-package in.kyle.api.verify.types;
+package in.kyle.api.verify.types.reflect;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import in.kyle.api.verify.ComparisionException;
 import in.kyle.api.verify.Predicate;
 import in.kyle.api.verify.Verify;
 
-/**
- * Created by Kyle on 3/23/2017.
- */
 public class ClassPredicateTest {
     
     @Test
@@ -71,20 +69,6 @@ public class ClassPredicateTest {
         Verify.that(UtilityEnumBad.class).isUtilityClass();
     }
     
-    @Test
-    public void testFinalClass() {
-        final class Final {
-        }
-        Verify.that(Final.class).isFinal();
-    }
-    
-    @Test(expected = ComparisionException.class)
-    public void testFinalClassError() {
-        class Final {
-        }
-        Verify.that(Final.class).isFinal();
-    }
-    
     @Test(expected = RuntimeException.class)
     public void testResolveMethodError() {
         Verify.that(Enum.class).getConstructor();
@@ -115,6 +99,46 @@ public class ClassPredicateTest {
     @Test(expected = ComparisionException.class)
     public void testUtilityPublicConstructor() {
         Verify.that(PublicConstructor.class).isUtilityClass();
+    }
+    
+    @Test
+    public void testIsInstance() {
+        Verify.that(true).isInstanceOf(Boolean.class);
+    }
+    
+    @Test(expected = ComparisionException.class)
+    public void testIsInstanceFail() {
+        Verify.that(1).isInstanceOf(Double.TYPE);
+    }
+    
+    @Test
+    public void testIsModifier() {
+        Verify.that(getClass()).is(ReflectModifier.PUBLIC);
+    }
+    
+    @Test(expected = ComparisionException.class)
+    public void testIsModifierFail() {
+        Verify.that(getClass()).is(ReflectModifier.INTERFACE);
+    }
+    
+    @Test
+    public void testGetAccessProtected() throws NoSuchMethodException {
+        class Test {
+            protected Test() {
+            }
+        }
+        String access = ClassPredicate.getAccess(Test.class.getDeclaredConstructors()[0]);
+        Assert.assertEquals("protected", access);
+    }
+    
+    @Test
+    public void testGetAccessPackage() throws NoSuchMethodException {
+        class Test {
+            Test() {
+            }
+        }
+        String access = ClassPredicate.getAccess(Test.class.getDeclaredConstructors()[0]);
+        Assert.assertEquals("package", access);
     }
     
     private static final class PublicConstructor {

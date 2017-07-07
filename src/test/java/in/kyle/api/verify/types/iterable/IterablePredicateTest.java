@@ -8,9 +8,6 @@ import java.util.List;
 
 import in.kyle.api.verify.Verify;
 
-/**
- * Created by Kyle on 6/12/2017.
- */
 public class IterablePredicateTest {
     
     private List<Integer> a;

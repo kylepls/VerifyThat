@@ -5,9 +5,6 @@ import org.junit.Test;
 import in.kyle.api.verify.ComparisionException;
 import in.kyle.api.verify.Verify;
 
-/**
- * Created by Kyle on 3/23/2017.
- */
 public class BooleanPredicateTest {
     
     @Test

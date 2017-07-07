@@ -4,73 +4,72 @@ import java.util.regex.Pattern;
 
 import in.kyle.api.verify.Predicate;
 
-/**
- * Created by Kyle on 3/23/2017.
- */
-public class StringPredicate extends Predicate<String> {
+public class StringPredicate extends Predicate<String, StringPredicate> {
     
     public StringPredicate(String compare) {
         super(compare);
     }
     
-    public void isEmpty() {
+    public StringPredicate isEmpty() {
         isNotNull();
-        process(compare.isEmpty(), "String is not empty, {}, expected empty", compare);
+        process(compare.isEmpty(), "empty string");
+        return this;
     }
     
-    public void startsWith(String string) {
+    public StringPredicate startsWith(String string) {
         isNotNull();
-        process(compare.startsWith(string), "String does not start with {}, {}", string, compare);
+        process(compare.startsWith(string), "startsWith(" + string + ")");
+        return this;
     }
     
-    public void endsWith(String string) {
+    public StringPredicate endsWith(String string) {
         isNotNull();
-        process(compare.endsWith(string), "String does not end with {}, {}", string, compare);
+        process(compare.endsWith(string), "endsWith(" + string + ")");
+        return this;
     }
     
-    public void containsPattern(String regex) {
+    public StringPredicate containsPattern(String regex) {
         isNotNull();
         Pattern pattern = Pattern.compile(regex);
-        process(pattern.matcher(compare).find(),
-                "String does not contain pattern {}, {}",
-                regex,
-                compare);
+        process(pattern.matcher(compare).find(), "containsPattern(" + regex + ")");
+        return this;
     }
     
-    public void notContainsPattern(String regex) {
+    public StringPredicate notContainsPattern(String regex) {
         isNotNull();
         Pattern pattern = Pattern.compile(regex);
-        process(!pattern.matcher(compare).find(), "String contains pattern {}, {}", regex, compare);
+        process(!pattern.matcher(compare).find(), "notContainsPattern(" + regex + ")");
+        return this;
     }
     
-    public void contains(String string) {
+    public StringPredicate contains(String string) {
         isNotNull();
-        process(compare.contains(string), "String does not contain {}, {}", string, compare);
+        process(compare.contains(string), "contains(" + string + ")");
+        return this;
     }
     
-    public void notContain(String string) {
+    public StringPredicate notContain(String string) {
         isNotNull();
-        process(!compare.contains(string),
-                "String contains {}, {}, when it should not",
-                string,
-                compare);
+        process(!compare.contains(string), "notContains(" + string + ")");
+        
+        return this;
     }
     
-    public void matches(String regex) {
+    public StringPredicate matches(String regex) {
         isNotNull();
-        process(compare.matches(regex), "String does not match pattern {}, {}", regex, compare);
+        process(compare.matches(regex), "matches(" + regex + ")");
+        return this;
     }
     
-    public void length(int len) {
+    public StringPredicate length(int len) {
         isNotNull();
-        process(compare.length() == len, "String not of length {}, {}", len, compare);
+        process(compare.length() == len, "length == " + len, compare.length());
+        return this;
     }
     
-    public void notLength(int len) {
+    public StringPredicate notLength(int len) {
         isNotNull();
-        process(compare.length() != len,
-                "String of length {}, {}, expected not length",
-                len,
-                compare);
+        process(compare.length() != len, "length != " + len, compare.length());
+        return this;
     }
 }

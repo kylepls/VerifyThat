@@ -3,80 +3,101 @@ package in.kyle.api.verify;
 import java.util.Arrays;
 
 import in.kyle.api.verify.utils.StringUtils;
-import lombok.AllArgsConstructor;
 
-/**
- * Created by Kyle on 3/23/2017.
- */
-@AllArgsConstructor
-public abstract class Predicate<T> {
+public abstract class Predicate<T, R extends Predicate<T, R>> {
     
     protected final T compare;
+    protected String named;
     
-    public void isNotNull() {
-        process(compare != null, "Value is null: {}", compare);
+    protected Predicate(T compare) {
+        this.compare = compare;
     }
     
-    public void isNull() {
-        process(compare == null, "Value is not null: {}", compare);
+    protected Predicate(T compare, String named) {
+        this.compare = compare;
+        this.named = named;
     }
     
-    public void isEqual(T t) {
+    public R named(String message, Object... args) {
+        named = StringUtils.replaceVariables(message, args);
+        return (R) this;
+    }
+    
+    public R isNotNull() {
+        process(compare != null, "not null");
+        return (R) this;
+    }
+    
+    public R isNull() {
+        process(compare == null, "null");
+        return (R) this;
+    }
+    
+    public R isEqual(T t) {
         isNotNull();
-        process(compare.equals(t), "Values are not equal {} != {}", compare, t);
+        process(compare.equals(t), "equals(" + t + ")", false);
+        return (R) this;
     }
     
-    public void isNotEqual(T t) {
+    public R isNotEqual(T t) {
         isNotNull();
-        process(!compare.equals(t), "Value is not equal {} not equal {}", compare, t);
+        process(!compare.equals(t), "notEquals(" + t + ")", false);
+        return (R) this;
     }
     
-    public void isSame(T t) {
+    public R isSame(T t) {
         isNotNull();
-        process(compare == t, "Value is same {} == {}", compare, t);
+        process(compare == t, compare + " == " + t, false);
+        return (R) this;
     }
     
-    public void isNotSame(T t) {
+    public R isNotSame(T t) {
         isNotNull();
-        process(compare != t, "Value is different {} != {}", compare, t);
+        process(compare != t, compare + " != " + t, false);
+        return (R) this;
     }
     
-    public void isInstanceOf(Class<?> clazz) {
+    public R isInstanceOf(Class<?> clazz) {
         isNotNull();
-        process(clazz.isInstance(compare),
-                "{} not is instance of {}",
-                compare.getClass().getName(),
-                clazz.getName());
+        process(clazz.isInstance(compare), clazz + " isInstance " + compare.getClass(), false);
+        return (R) this;
     }
     
-    public void isNotInstanceOf(Class<?> clazz) {
+    public R isNotInstanceOf(Class<?> clazz) {
         isNotNull();
-        process(!clazz.isInstance(compare), "Value not instance of {}", clazz.getName());
+        process(!clazz.isInstance(compare), clazz + " isNotInstance " + compare.getClass(), false);
+        return (R) this;
     }
     
-    public void isExactType(Class<?> clazz) {
+    public R isExactType(Class<?> clazz) {
         isNotNull();
-        process(clazz.equals(compare.getClass()),
-                "Value class not {}, but instead {}",
-                clazz.getName(),
-                compare.getClass().getName());
+        Verify.that(compare.getClass()).isEqual(clazz);
+        return (R) this;
     }
     
-    public void isNotExactType(Class<?> clazz) {
+    public R isNotExactType(Class<?> clazz) {
         isNotNull();
-        process(!clazz.equals(compare.getClass()),
-                "Value is not class {}, but instead {}",
-                compare.getClass().getName());
+        Verify.that(compare.getClass()).isNotEqual(clazz);
+        return (R) this;
     }
     
-    protected void process(boolean condition, String errorMessage, Object... vars) {
+    protected void process(boolean condition, String expected) {
         if (!condition) {
-            throw error(errorMessage, vars);
+            throw error("Expected [{}] but got [{}]", expected, compare);
+        }
+    }
+    
+    protected void process(boolean condition, String expected, Object actual) {
+        if (!condition) {
+            throw error("Expected [{}] but got [{}]", expected, actual);
         }
     }
     
     protected ComparisionException error(String message, Object... vars) {
         String send = StringUtils.replaceVariables(message, vars);
+        if (named != null) {
+            send = "(" + named + ") " + send;
+        }
         ComparisionException comparisionException = new ComparisionException(send);
         eraseTopPackageFromStack(comparisionException);
         return comparisionException;

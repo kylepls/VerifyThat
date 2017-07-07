@@ -8,9 +8,6 @@ import java.util.Collection;
 import in.kyle.api.verify.ComparisionException;
 import in.kyle.api.verify.Verify;
 
-/**
- * Created by Kyle on 3/23/2017.
- */
 public class CollectionPredicateTest {
     
     @Test
@@ -46,6 +43,16 @@ public class CollectionPredicateTest {
     @Test
     public void testIsNotEmpty() {
         Verify.that(of(1, 2, 3)).isNotEmpty();
+    }
+    
+    @Test
+    public void testSizeIsGreaterThan() {
+        Verify.that(of(1,2,3)).sizeIsGreaterThan(2);
+    }
+    
+    @Test
+    public void testSizeIsLessThan() {
+        Verify.that(of(1,2,3)).sizeIsLessThan(5);
     }
     
     @Test(expected = ComparisionException.class)

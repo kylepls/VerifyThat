@@ -2,9 +2,6 @@ package in.kyle.api.verify;
 
 import org.junit.Test;
 
-/**
- * Created by Kyle on 6/12/2017.
- */
 public class ThrowableRunnableTest {
     
     @Test

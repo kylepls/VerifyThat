@@ -6,9 +6,6 @@ import java.lang.reflect.Method;
 
 import in.kyle.api.verify.Verify;
 
-/**
- * Created by Kyle on 6/6/2017.
- */
 public class ThrowablePredicateTest {
     
     @Test

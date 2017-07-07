@@ -2,20 +2,19 @@ package in.kyle.api.verify.types;
 
 import in.kyle.api.verify.Predicate;
 
-/**
- * Created by Kyle on 3/23/2017.
- */
-public class BooleanPredicate extends Predicate<Boolean> {
+public class BooleanPredicate extends Predicate<Boolean, BooleanPredicate> {
     
     public BooleanPredicate(Boolean compare) {
         super(compare);
     }
     
-    public void isTrue() {
-        process(compare, "Value is false, expected true");
+    public BooleanPredicate isTrue() {
+        process(compare, "true");
+        return this;
     }
     
-    public void isFalse() {
-        process(!compare, "Value is true, expected false");
+    public BooleanPredicate isFalse() {
+        process(!compare, "false");
+        return this;
     }
 }

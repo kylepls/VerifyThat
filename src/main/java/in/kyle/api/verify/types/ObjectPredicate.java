@@ -2,10 +2,7 @@ package in.kyle.api.verify.types;
 
 import in.kyle.api.verify.Predicate;
 
-/**
- * Created by Kyle on 3/23/2017.
- */
-public class ObjectPredicate extends Predicate<Object> {
+public class ObjectPredicate extends Predicate<Object, ObjectPredicate> {
     public ObjectPredicate(Object compare) {
         super(compare);
     }
