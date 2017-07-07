@@ -6,7 +6,7 @@ import in.kyle.api.verify.ComparisionException;
 import in.kyle.api.verify.Verify;
 
 public class StringPredicateTest {
-
+    
     @Test
     public void testStringEmpty() {
         Verify.that("").isEmpty();
@@ -85,25 +85,5 @@ public class StringPredicateTest {
     @Test(expected = ComparisionException.class)
     public void testMatchesError() {
         Verify.that("one").matches(".");
-    }
-    
-    @Test
-    public void testLength() {
-        Verify.that("one").length(3);
-    }
-    
-    @Test(expected = ComparisionException.class)
-    public void testLengthError() {
-        Verify.that("one").length(1);
-    }
-    
-    @Test
-    public void testLengthNot() {
-        Verify.that("one").notLength(4);
-    }
-    
-    @Test(expected = ComparisionException.class)
-    public void testLengthNotError() {
-        Verify.that("one").notLength(3);
     }
 }

@@ -115,7 +115,6 @@ public class NumberPredicateTest {
     // wtf
     @Test
     public void testNegativeZero() {
-        
         Verify.that(-0.0).isEqual(0.0);
     }
 }

@@ -5,37 +5,64 @@
 ## VerifyThat
 Make testing validation more fluent and understandable.
 
+##### Example:
+    
+    String test = "asd";
+    Verify.that(test)
+          .named("Check string {}", test)           // Name the test
+          .sizeIsGreaterThan(2)                     // size > 2
+          .contains("sd")                           // contains string "sd"
+          .contains('q');                           // ERROR!!!
+          
+    // ComparisionException: (Check string asd) Expected [contains q] but got [[a, s, d]]
+
 ##### String:
     
-    // before
-    Assert.assertEquals("A and b must be equal", expected, actual);
+    Verify.that("asdasd")
+          .matches("\\w+")      // regex pattern
+          .sizeIsGreaterThan(3) // length > 3
+          .startsWith("as")     // starts with "as"
+          .contains('d')        // contains letter d
+          .notContains('q');    // contains letter q
 
-    // after
-    Verify.that(expected).isEqual(actual);
-
-##### Boolean:
-
-    // before
-    Assert.assertTrue(bool);
+##### Arrays:
     
-    // after
-    Verify.that(true).isTrue();
-
-##### Array:
-    
-    // before
-    Assert.assertArrayEquals(array, new int[] {1,2,3});
-    
-    // after
-    Verify.that(array).arrayEquals(1, 2, 3);
+    Verify.that(new Object[] {1, 2, 3})
+          .isNotEmpty()                 // size > 0
+          .sizeIsGreaterThan(1)         // size > 1
+          .sizeIsLessThan(4)            // size < 4
+          .contains(1, 3)               // contains 1, contains 3
+          .arrayEquals(1, 2, 3)         // is same as [1, 2, 3]
 
 ##### Map:
-
-    // before    
-    Assert.assertEquals(true, map.containsKey("a"));
     
-    // after
-    Verify.that(map).containsKey("a");
+    Verify.that(map)
+          .sizeIsGreaterThan(1)     // size > 1
+          .sizeIsLessThan(4)        // size < 4       
+          .containsKey("a")         // contains key=a
+          .containsValue(1)         // contains value=1
+          .containsKeyValue("a", 1);// contains (a:1)
+
+##### Runnable:
+    
+    Verify.that(() -> { throw new IOException("BAD THINGS", new Exception()); })
+          .timeout(10, TimeUnit.SECONDS)         // 10s timeout
+          .throwsException(IOException.class)    // Caught IOException
+          .messageIs("BAD THINGS")               // Exception message = "BAD THINGS"
+          .causeIs(Exception.class);             // Cause of exception is Exception
+
+##### Classes:
+    
+    // Validation of modifiers
+    Verify.that(getClass()).is(ReflectModifier.PUBLIC);
+    
+    // Verify existance of methods and fields matching conditions
+    Verify.that(Runnable.class)
+          .matcher()
+          .hasMethod()
+          .typeIs(Void.TYPE)
+          .getMatched()
+          .sizeIs(1);
 
 #### VCS:
 

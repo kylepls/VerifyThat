@@ -1,19 +1,19 @@
 package in.kyle.api.verify.types;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
-import in.kyle.api.verify.Predicate;
+import in.kyle.api.verify.types.iterable.IterablePredicate;
 
-public class StringPredicate extends Predicate<String, StringPredicate> {
+public class StringPredicate
+        extends IterablePredicate<Character, List<Character>, StringPredicate> {
+    
+    private final String compare;
     
     public StringPredicate(String compare) {
-        super(compare);
-    }
-    
-    public StringPredicate isEmpty() {
-        isNotNull();
-        process(compare.isEmpty(), "empty string");
-        return this;
+        super(getCharacters(compare));
+        this.compare = compare;
     }
     
     public StringPredicate startsWith(String string) {
@@ -61,15 +61,23 @@ public class StringPredicate extends Predicate<String, StringPredicate> {
         return this;
     }
     
-    public StringPredicate length(int len) {
+    public StringPredicate isEqual(String string) {
         isNotNull();
-        process(compare.length() == len, "length == " + len, compare.length());
+        process(compare.equals(string), compare + " equals " + string, false);
         return this;
     }
     
-    public StringPredicate notLength(int len) {
+    public StringPredicate isNotEqual(String string) {
         isNotNull();
-        process(compare.length() != len, "length != " + len, compare.length());
+        process(!compare.equals(string), compare + " notEquals " + string, false);
         return this;
+    }
+    
+    private static List<Character> getCharacters(String string) {
+        List<Character> characters = new ArrayList<>();
+        for (char c : string.toCharArray()) {
+            characters.add(c);
+        }
+        return characters;
     }
 }

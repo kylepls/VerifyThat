@@ -58,15 +58,15 @@ public class RunnablePredicateTest {
     
     @Test(timeout = 10_000, expected = ComparisionException.class)
     public void testTimeout() {
-        Verify.that(() -> {
-            Thread.sleep(1000);
-        }).timeout(10, TimeUnit.MILLISECONDS).doesNotThrowException();
+        Verify.that(() -> Thread.sleep(1000))
+              .timeout(10, TimeUnit.MILLISECONDS)
+              .doesNotThrowException();
     }
     
     @Test(expected = RuntimeException.class)
     public void testInterrupted() {
         Thread thread = Thread.currentThread();
-        new Thread(()->{
+        new Thread(() -> {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
