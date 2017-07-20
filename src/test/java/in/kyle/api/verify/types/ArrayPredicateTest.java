@@ -85,4 +85,9 @@ public class ArrayPredicateTest {
     public void testContainsManyFail() {
         Verify.that(odd).contains(1, 4);
     }
+    
+    @Test(expected = ComparisionException.class)
+    public void testNullVectorElement() {
+        Verify.that(new Object[] {'a', 'b', null, 'd'}).arrayEquals('a', 'b', 'c', 'd');
+    }
 }

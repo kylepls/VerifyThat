@@ -1,18 +1,20 @@
 package in.kyle.api.verify;
 
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Map;
 
 import in.kyle.api.verify.types.ArrayPredicate;
 import in.kyle.api.verify.types.BooleanPredicate;
-import in.kyle.api.verify.types.reflect.ClassPredicate;
 import in.kyle.api.verify.types.CollectionPredicate;
+import in.kyle.api.verify.types.InputStreamPredicate;
 import in.kyle.api.verify.types.MapPredicate;
 import in.kyle.api.verify.types.NumberPredicate;
 import in.kyle.api.verify.types.ObjectPredicate;
 import in.kyle.api.verify.types.RunnablePredicate;
 import in.kyle.api.verify.types.StringPredicate;
 import in.kyle.api.verify.types.ThrowablePredicate;
+import in.kyle.api.verify.types.reflect.ClassPredicate;
 
 public final class Verify {
     
@@ -57,6 +59,10 @@ public final class Verify {
     
     public static <K, V> MapPredicate<K, V> that(Map<K, V> map) {
         return new MapPredicate<>(map);
+    }
+    
+    public static InputStreamPredicate that(InputStream in) {
+        return new InputStreamPredicate(in);
     }
     
     public interface ThrowableRunnable {

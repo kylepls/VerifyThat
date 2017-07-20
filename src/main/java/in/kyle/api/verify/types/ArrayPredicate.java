@@ -36,8 +36,12 @@ public class ArrayPredicate<T> extends IterablePredicate<T, List<T>, ArrayPredic
             return false;
         }
         for (int i = 0; i < a.length; i++) {
-            if (!a[i].equals(b[i])) {
-                return false;
+            if (!(a[i] == null && b[i] == null)) {
+                if (a[i] == null) {
+                    return false;
+                } else if (!a[i].equals(b[i])) {
+                    return false;
+                }
             }
         }
         return true;
