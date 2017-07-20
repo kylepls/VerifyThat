@@ -23,8 +23,7 @@ public class InputStreamPredicate extends Predicate<InputStream, InputStreamPred
     public ArrayPredicate<Byte> readAll() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         copyStream(compare, baos);
-        Byte[] bytes = boxByteArray(baos.toByteArray());
-        return Verify.that(bytes);
+        return Verify.that(baos.toByteArray());
     }
     
     private void copyStream(InputStream in, OutputStream out) {
@@ -37,13 +36,5 @@ public class InputStreamPredicate extends Predicate<InputStream, InputStreamPred
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-    
-    private Byte[] boxByteArray(byte[] arr) {
-        Byte[] res = new Byte[arr.length];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = arr[i];
-        }
-        return res;
     }
 }

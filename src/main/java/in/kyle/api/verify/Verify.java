@@ -16,7 +16,7 @@ import in.kyle.api.verify.types.StringPredicate;
 import in.kyle.api.verify.types.ThrowablePredicate;
 import in.kyle.api.verify.types.reflect.ClassPredicate;
 
-public final class Verify {
+public final class Verify extends PrimitivesVerify {
     
     private Verify() {
     }
@@ -64,6 +64,9 @@ public final class Verify {
     public static InputStreamPredicate that(InputStream in) {
         return new InputStreamPredicate(in);
     }
+    
+    //    Java Generics sucks sometimes
+    
     
     public interface ThrowableRunnable {
         void run() throws Throwable;
