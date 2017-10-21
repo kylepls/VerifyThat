@@ -35,25 +35,25 @@ public abstract class Predicate<T, R extends Predicate<T, R>> {
     
     public R isEqual(T t) {
         isNotNull();
-        process(compare.equals(t), "equals(" + t + ")", false);
+        process(compare.equals(t), "equals(" + t + ")", t);
         return (R) this;
     }
     
     public R isNotEqual(T t) {
         isNotNull();
-        process(!compare.equals(t), "notEquals(" + t + ")", false);
+        process(!compare.equals(t), "notEquals(" + t + ")", t);
         return (R) this;
     }
     
     public R isSame(T t) {
         isNotNull();
-        process(compare == t, compare + " == " + t, false);
+        process(compare == t, compare + " == " + t, t);
         return (R) this;
     }
     
     public R isNotSame(T t) {
         isNotNull();
-        process(compare != t, compare + " != " + t, false);
+        process(compare != t, compare + " != " + t, t);
         return (R) this;
     }
     
