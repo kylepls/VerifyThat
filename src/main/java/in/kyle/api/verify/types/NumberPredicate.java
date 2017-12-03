@@ -10,7 +10,7 @@ public class NumberPredicate extends Predicate<Number, NumberPredicate> {
     
     public NumberPredicate isZero() {
         isNotNull();
-        process(compare.doubleValue() == 0 || compare.doubleValue() == -0.0, "0");
+        isEqual(0);
         return this;
     }
     
