@@ -2,6 +2,9 @@ package in.kyle.api.verify.types;
 
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import in.kyle.api.verify.ComparisionException;
 import in.kyle.api.verify.Verify;
 
@@ -85,5 +88,35 @@ public class StringPredicateTest {
     @Test(expected = ComparisionException.class)
     public void testMatchesError() {
         Verify.that("one").matches(".");
+    }
+    
+    @Test
+    public void testDiffEmpty() throws IOException {
+        String file1 = loadFile("file1");
+        Verify.that(file1).diffEqual(file1);
+    }
+    
+    @Test(expected = ComparisionException.class)
+    public void testDiffEmptyError() throws IOException {
+        String file1 = loadFile("file1");
+        String file2 = loadFile("file2");
+        Verify.that(file2).diffEqual(file1);
+    }
+    
+    private String loadFile(String file) throws IOException {
+        InputStream resource = getResource("/" + file);
+        if (resource == null) {
+            resource = getResource(file);
+        }
+        StringBuilder sb = new StringBuilder();
+        int data;
+        while ((data = resource.read()) != -1) {
+            sb.append((char) data);
+        }
+        return sb.toString();
+    }
+    
+    private InputStream getResource(String path) {
+        return StringPredicate.class.getResourceAsStream(path);
     }
 }
