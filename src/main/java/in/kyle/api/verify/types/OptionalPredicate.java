@@ -7,7 +7,7 @@ import in.kyle.api.verify.Verify;
 
 public class OptionalPredicate<T> extends Predicate<Optional<T>, OptionalPredicate<T>>{
     
-    protected OptionalPredicate(Optional<T> compare) {
+    public OptionalPredicate(Optional<T> compare) {
         super(compare);
     }
     

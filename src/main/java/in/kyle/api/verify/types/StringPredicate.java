@@ -1,8 +1,5 @@
 package in.kyle.api.verify.types;
 
-import com.github.difflib.DiffUtils;
-import com.github.difflib.algorithm.DiffException;
-import com.github.difflib.patch.Patch;
 import com.github.difflib.text.DiffRow;
 import com.github.difflib.text.DiffRowGenerator;
 
@@ -12,6 +9,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import in.kyle.api.utils.Try;
 import in.kyle.api.verify.types.iterable.IterablePredicate;
 
 public class StringPredicate
@@ -96,29 +94,19 @@ public class StringPredicate
         List<DiffRow> diffRows = getDiffRows(compareList, stringList);
         String diff = diffRows.stream()
                               .filter(diffRow -> diffRow.getTag() != DiffRow.Tag.EQUAL)
-                              .map(Object::toString)
+                              .map(diffRow -> diffRows.indexOf(diffRow) + ": " + diffRow.toString())
+                              .map(s -> s.replaceAll("\\p{C}", "?"))
                               .collect(Collectors.joining("\n"));
-        process(diffRows.size() == 0, "Same file", "\n" + diff + "\n");
+        process(diffRows.size() == 0,
+                "Same file",
+                String.format("\n%s\n\n\n%s\n\n\n%s\n", compare, string, diff));
         return this;
     }
     
     private List<DiffRow> getDiffRows(List<String> compareList, List<String> stringList) {
-        DiffRowGenerator generator =
-                DiffRowGenerator.create().oldTag(f -> "---").newTag(f -> "+++").build();
-        try {
-            List<DiffRow> diffRows = generator.generateDiffRows(compareList, stringList);
-            diffRows.removeIf(diffRow -> diffRow.getTag() == DiffRow.Tag.EQUAL);
-            return diffRows;
-        } catch (DiffException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    private Patch<String> computeDiff(String string) {
-        try {
-            return DiffUtils.diff(compare, string);
-        } catch (DiffException e) {
-            throw new RuntimeException(e);
-        }
+        DiffRowGenerator generator = DiffRowGenerator.create().build();
+        List<DiffRow> diffRows = Try.to(() -> generator.generateDiffRows(compareList, stringList));
+        diffRows.removeIf(diffRow -> diffRow.getTag() == DiffRow.Tag.EQUAL);
+        return diffRows;
     }
 }

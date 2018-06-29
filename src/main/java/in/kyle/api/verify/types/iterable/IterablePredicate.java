@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import in.kyle.api.verify.Predicate;
 
 public abstract class IterablePredicate<V, T extends Iterable<V>, R extends IterablePredicate<V, 
-T, R>>
+        T, R>>
         extends Predicate<T, R> {
     
     private Collection<V> collection;
@@ -63,6 +64,28 @@ T, R>>
     public R notContains(V v) {
         isNotNull();
         process(!collection.contains(v), "notContains " + v, collection);
+        return (R) this;
+    }
+    
+    public R allMatch(java.util.function.Predicate<V> predicate) {
+        isNotNull();
+        List<V> nonMatches =
+                collection.stream().filter(v -> !predicate.test(v)).collect(Collectors.toList());
+        process(nonMatches.size() == 0, "all matches", "Failed to match " + nonMatches);
+        return (R) this;
+    }
+    
+    public R anyMatch(java.util.function.Predicate<V> predicate) {
+        isNotNull();
+        boolean anyMatch = collection.stream().anyMatch(predicate);
+        process(anyMatch, "any matches", "No matches");
+        return (R) this;
+    }
+    
+    public R noneMatch(java.util.function.Predicate<V> predicate) {
+        isNotNull();
+        List<V> matches = collection.stream().filter(predicate).collect(Collectors.toList());
+        process(matches.size() == 0, "none matche", "Matched: " + matches);
         return (R) this;
     }
     
