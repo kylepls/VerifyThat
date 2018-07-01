@@ -20,4 +20,10 @@ public class StringUtilsTest {
         String string = "\0\0\0";
         Verify.that(StringUtils.ezReadString(string)).isEqual("\ufffd\ufffd\ufffd");
     }
+    
+    @Test
+    public void testKeepNl() {
+        String string = "aaa\nbbb";
+        Verify.that(StringUtils.ezReadString(string)).isEqual("aaa\u2424\nbbb");
+    }
 }

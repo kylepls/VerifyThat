@@ -9,7 +9,7 @@ public final class StringUtils {
         put(" ", "\u2423");
         put("\r", "\u23ce");
         put("\n", "\u2424\n");
-        put("(?=[^\u2424\u23ce\u2423])\\p{C}", "\ufffd");
+        put("(?=[^\u2424\u23ce\u2423\n])\\p{C}", "\ufffd");
         
     }};
     
