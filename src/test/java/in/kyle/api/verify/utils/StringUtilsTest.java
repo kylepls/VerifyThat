@@ -14,4 +14,10 @@ public class StringUtilsTest {
     public void testUtility() {
         Verify.that(StringUtils.class).isUtilityClass();
     }
+    
+    @Test
+    public void testHiddenChar() {
+        String string = "\0\0\0";
+        Verify.that(StringUtils.ezReadString(string)).isEqual("\ufffd\ufffd\ufffd");
+    }
 }

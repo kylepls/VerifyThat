@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import in.kyle.api.utils.Try;
 import in.kyle.api.verify.types.iterable.IterablePredicate;
+import in.kyle.api.verify.utils.StringUtils;
 
 public class StringPredicate
         extends IterablePredicate<Character, List<Character>, StringPredicate> {
@@ -30,15 +31,19 @@ public class StringPredicate
         return characters;
     }
     
+    String cleanString(String string) {
+        return StringUtils.ezReadString(string);
+    }
+    
     public StringPredicate startsWith(String string) {
         isNotNull();
-        process(compare.startsWith(string), "startsWith(" + string + ")");
+        process(compare.startsWith(string), "startsWith(" + cleanString(string) + ")");
         return this;
     }
     
     public StringPredicate endsWith(String string) {
         isNotNull();
-        process(compare.endsWith(string), "endsWith(" + string + ")");
+        process(compare.endsWith(string), "endsWith(" + cleanString(string) + ")");
         return this;
     }
     
@@ -58,13 +63,13 @@ public class StringPredicate
     
     public StringPredicate contains(String string) {
         isNotNull();
-        process(compare.contains(string), "contains(" + string + ")");
+        process(compare.contains(string), "contains(" + cleanString(string) + ")");
         return this;
     }
     
     public StringPredicate notContain(String string) {
         isNotNull();
-        process(!compare.contains(string), "notContains(" + string + ")");
+        process(!compare.contains(string), "notContains(" + cleanString(string) + ")");
         
         return this;
     }
@@ -77,13 +82,17 @@ public class StringPredicate
     
     public StringPredicate isEqual(String string) {
         isNotNull();
-        process(compare.equals(string), compare + " equals " + string, false);
+        process(compare.equals(string),
+                cleanString(compare) + " equals " + cleanString(string),
+                false);
         return this;
     }
     
     public StringPredicate isNotEqual(String string) {
         isNotNull();
-        process(!compare.equals(string), compare + " notEquals " + string, false);
+        process(!compare.equals(string),
+                cleanString(compare) + " notEquals " + cleanString(string),
+                false);
         return this;
     }
     
@@ -99,7 +108,10 @@ public class StringPredicate
                               .collect(Collectors.joining("\n"));
         process(diffRows.size() == 0,
                 "Same file",
-                String.format("\n%s\n\n\n%s\n\n\n%s\n", compare, string, diff));
+                String.format("\n%s\n\n\n%s\n\n\n%s\n",
+                              cleanString(compare),
+                              cleanString(string),
+                              diff));
         return this;
     }
     

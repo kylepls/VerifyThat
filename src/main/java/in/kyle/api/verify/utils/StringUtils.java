@@ -1,9 +1,17 @@
 package in.kyle.api.verify.utils;
 
-/**
- * Created by Kyle at Mar 8, 2015
- */
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public final class StringUtils {
+    
+    private static final Map<String, String> replacements = new LinkedHashMap<String, String>() {{
+        put(" ", "\u2423");
+        put("\r", "\u23ce");
+        put("\n", "\u2424\n");
+        put("(?=[^\u2424\u23ce\u2423])\\p{C}", "\ufffd");
+        
+    }};
     
     private StringUtils() {
     }
@@ -22,5 +30,13 @@ public final class StringUtils {
         }
         
         return builder.toString();
+    }
+    
+    public static String ezReadString(String input) {
+        String result = input;
+        for (Map.Entry<String, String> entry : replacements.entrySet()) {
+            result = result.replaceAll(entry.getKey(), entry.getValue());
+        }
+        return result;
     }
 }

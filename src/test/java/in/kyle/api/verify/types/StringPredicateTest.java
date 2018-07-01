@@ -103,6 +103,7 @@ public class StringPredicateTest {
         Verify.that(file2).diffEqual(file1);
     }
     
+    
     private String loadFile(String file) throws IOException {
         InputStream resource = getResource("/" + file);
         if (resource == null) {
