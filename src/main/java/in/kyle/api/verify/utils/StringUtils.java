@@ -10,7 +10,6 @@ public final class StringUtils {
         put("\r", "\u23ce");
         put("\n", "\u2424\n");
         put("(?=[^\u2424\u23ce\u2423\n])\\p{C}", "\ufffd");
-        
     }};
     
     private StringUtils() {

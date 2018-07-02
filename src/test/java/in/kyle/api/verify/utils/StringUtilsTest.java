@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import in.kyle.api.verify.Verify;
 
+import static in.kyle.api.verify.utils.StringUtils.ezReadString;
+
 public class StringUtilsTest {
     @Test(expected = IllegalArgumentException.class)
     public void testWrongNumberArgs() {
@@ -18,12 +20,12 @@ public class StringUtilsTest {
     @Test
     public void testHiddenChar() {
         String string = "\0\0\0";
-        Verify.that(StringUtils.ezReadString(string)).isEqual("\ufffd\ufffd\ufffd");
+        Verify.that(ezReadString(string)).isEqual("\ufffd\ufffd\ufffd");
     }
     
     @Test
     public void testKeepNl() {
         String string = "aaa\nbbb";
-        Verify.that(StringUtils.ezReadString(string)).isEqual("aaa\u2424\nbbb");
+        Verify.that(ezReadString(string)).isEqual("aaa\u2424\nbbb");
     }
 }

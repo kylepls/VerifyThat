@@ -18,6 +18,30 @@ public abstract class Predicate<T, R extends Predicate<T, R>> {
         this.named = named;
     }
     
+    private static void eraseFromStack(int calls, Throwable throwable) {
+        StackTraceElement[] stackTrace = throwable.getStackTrace();
+        StackTraceElement[] elements = Arrays.copyOfRange(stackTrace, calls, stackTrace.length);
+        throwable.setStackTrace(elements);
+    }
+    
+    private static void eraseTopPackageFromStack(Throwable throwable) {
+        StackTraceElement[] stackTrace = throwable.getStackTrace();
+        String packageName = getPackage(stackTrace[0].getClassName());
+        for (int i = 0; i < stackTrace.length; i++) {
+            StackTraceElement element = stackTrace[i];
+            String p = getPackage(element.getClassName());
+            if (!packageName.equals(p)) {
+                eraseFromStack(i, throwable);
+                break;
+            }
+        }
+    }
+    
+    private static String getPackage(String fileName) {
+        fileName = fileName.replace(".java", "");
+        return fileName.substring(0, fileName.lastIndexOf("."));
+    }
+    
     public R named(String message, Object... args) {
         named = StringUtils.replaceVariables(message, args);
         return (R) this;
@@ -83,13 +107,13 @@ public abstract class Predicate<T, R extends Predicate<T, R>> {
     
     protected void process(boolean condition, String expected) {
         if (!condition) {
-            throw error("Expected [{}] but got [{}]", expected, compare);
+            throw error("Expected [" + expected + "] but got [" + compare + "]");
         }
     }
     
     protected void process(boolean condition, String expected, Object actual) {
         if (!condition) {
-            throw error("Expected [{}] but got [{}]", expected, actual);
+            throw error("Expected [" + expected + "] but got [" + actual + "]");
         }
     }
     
@@ -101,29 +125,5 @@ public abstract class Predicate<T, R extends Predicate<T, R>> {
         ComparisionException comparisionException = new ComparisionException(send);
         eraseTopPackageFromStack(comparisionException);
         return comparisionException;
-    }
-    
-    private static void eraseFromStack(int calls, Throwable throwable) {
-        StackTraceElement[] stackTrace = throwable.getStackTrace();
-        StackTraceElement[] elements = Arrays.copyOfRange(stackTrace, calls, stackTrace.length);
-        throwable.setStackTrace(elements);
-    }
-    
-    private static void eraseTopPackageFromStack(Throwable throwable) {
-        StackTraceElement[] stackTrace = throwable.getStackTrace();
-        String packageName = getPackage(stackTrace[0].getClassName());
-        for (int i = 0; i < stackTrace.length; i++) {
-            StackTraceElement element = stackTrace[i];
-            String p = getPackage(element.getClassName());
-            if (!packageName.equals(p)) {
-                eraseFromStack(i, throwable);
-                break;
-            }
-        }
-    }
-    
-    private static String getPackage(String fileName) {
-        fileName = fileName.replace(".java", "");
-        return fileName.substring(0, fileName.lastIndexOf("."));
     }
 }
