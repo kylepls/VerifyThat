@@ -104,7 +104,7 @@ public class StringPredicate
         String diff = diffRows.stream()
                               .filter(diffRow -> diffRow.getTag() != DiffRow.Tag.EQUAL)
                               .map(diffRow -> diffRows.indexOf(diffRow) + ": " + diffRow.toString())
-                              .map(s -> s.replaceAll("\\p{C}", "?"))
+                              .map(this::cleanString)
                               .collect(Collectors.joining("\n"));
         process(diffRows.size() == 0,
                 "Same file",

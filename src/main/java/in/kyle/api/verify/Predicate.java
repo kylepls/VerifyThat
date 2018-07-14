@@ -59,13 +59,13 @@ public abstract class Predicate<T, R extends Predicate<T, R>> {
     
     public R isEqual(T t) {
         isNotNull();
-        process(compare.equals(t), "equals(" + t + ")", t);
+        process(compare.equals(t), "equals(" + compare + ")", t);
         return (R) this;
     }
     
     public R isNotEqual(T t) {
         isNotNull();
-        process(!compare.equals(t), "notEquals(" + t + ")", t);
+        process(!compare.equals(t), "notEquals(" + compare + ")", t);
         return (R) this;
     }
     
